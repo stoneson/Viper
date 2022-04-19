@@ -10,4 +10,11 @@ namespace HelloWorldDto
         public double Amount { get { return Price * Number; } }
         public string CountryOfOrigin { get; set; }
     }
+
+    public class PersonDto
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public string CountryOfOrigin { get; set; }
+    }
 }

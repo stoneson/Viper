@@ -1,3 +1,3 @@
 cd %cd%
-cd ./ViperCenter/bin/Debug/net5
+cd ./ViperCenter/bin/Debug/net6.0
 dotnet ViperCenter.dll

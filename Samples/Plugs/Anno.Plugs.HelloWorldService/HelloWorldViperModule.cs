@@ -25,6 +25,17 @@ namespace Anno.Plugs.HelloWorldService
             var soEasyMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<ActionResult<string>>(this.InvokeProcessor("Anno.Plugs.SoEasy", "AnnoSoEasy", "SayHi", input)).OutputData;
             return new { HelloWorldViperMsg = $"{name}你好啊，今年{age}岁了", SoEasyMsg = soEasyMsg };
         }
+        [AnnoInfo(Desc = "世界你好啊SayHello2")]
+        public dynamic SayHello2([AnnoInfo(Desc = "人员信息")][FromBody] PersonDto person
+            , [AnnoInfo(Desc = "人员信息2")] PersonDto person2)
+        {
+            return new { HelloWorldViperMsg = $"{person.Name}你好啊，今年{ person2.Age}岁了"};
+        }
+        [AnnoInfo(Desc = "世界你好啊SayHello3")]
+        public dynamic SayHello3([AnnoInfo(Desc = "人员信息")] PersonDto person)
+        {
+            return new { HelloWorldViperMsg = $"{person.Name}你好啊，今年{ person.Age}岁了" };
+        }
 
         [AnnoInfo(Desc = "两个整数相减等于几？我来帮你算（x-y=?）")]
         public int Subtraction([AnnoInfo(Desc = "整数X")] int x, [AnnoInfo(Desc = "整数Y")] int y)

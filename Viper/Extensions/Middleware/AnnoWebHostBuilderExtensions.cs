@@ -19,7 +19,8 @@ namespace Microsoft.AspNetCore
     using System.Collections.Concurrent;
     using Anno.CronNET;
 
-    using NetTools;
+    using Anno.Const.Enum;
+    using System.Net;
 
     /// <summary>
     /// 接入服务中心的HostBuilder中间件
@@ -61,6 +62,7 @@ namespace Microsoft.AspNetCore
         public AnnoSetupFilter(ViperConfig _viperConfig)
         {
             CronDaemon.AddJob("1 */10 * * * ? *", ClearLimit);
+            CronDaemon.AddJob("*/30 * * * * ? *", UtilJob.GcTask);
             CronDaemon.Start();
             this.vierConfig = _viperConfig;
         }
@@ -73,44 +75,104 @@ namespace Microsoft.AspNetCore
                 app.UseEndpoints(endpoints =>
                 {
                     endpoints.Map("SysMg/Api", Api);
-                    endpoints.Map("Deploy/Api", DeloyApi);
+                    endpoints.Map("AnnoApi/ServiceInstance", ServiceInstanceApi);
+                    endpoints.Map("AnnoApi/DeployService", DeployServiceApi);
+                    endpoints.Map("AnnoApi/{channel}/{router}/{method}/{nodeName?}", AnnoApi);
                 });
                 next(app);
             };
         }
-        private Task Api(HttpContext context)
+        private async Task ServiceInstanceApi(HttpContext context)
         {
-            return ApiInvoke(context, (input) =>
+            context.Response.ContentType = "application/javascript; charset=utf-8";
+            var instances = UtilService.GetServiceInstances();
+            context.Response.StatusCode = 200;
+            Dictionary<string, object> rlt = new Dictionary<string, object>();
+            rlt.Add("output", null);
+            rlt.Add("outputData", instances);
+            rlt.Add("status", true);
+            rlt.Add("msg", null);
+            var rltExec = System.Text.Encoding.UTF8.GetString(rlt.ExecuteResult());
+            await context.Response.WriteAsync(rltExec);
+        }
+        private async Task DeployServiceApi(HttpContext context)
+        {
+            context.Response.ContentType = "application/javascript; charset=utf-8";
+            var instances = UtilService.GetDeployServices();
+            context.Response.StatusCode = 200;
+            Dictionary<string, object> rlt = new Dictionary<string, object>();
+            rlt.Add("output", null);
+            rlt.Add("outputData", instances);
+            rlt.Add("status", true);
+            rlt.Add("msg", null);
+            var rltExec = System.Text.Encoding.UTF8.GetString(rlt.ExecuteResult());
+            await context.Response.WriteAsync(rltExec);
+        }
+
+        private async Task Api(HttpContext context)
+        {
+            await ApiInvoke(context, (input) =>
             {
                 return Connector.BrokerDns(input);
             });
         }
-        private Task DeloyApi(HttpContext context)
+
+        private async Task AnnoApi(HttpContext context)
         {
-            return ApiInvoke(context, (input) =>
+            var routeValues = context.Request.RouteValues;
+            routeValues.TryGetValue("channel", out object channel);
+            routeValues.TryGetValue("router", out object router);
+            routeValues.TryGetValue("method", out object method);
+            routeValues.TryGetValue("nodeName", out object nodeName);
+
+            await ApiInvoke(context,  (input) =>
             {
+                input[Eng.NAMESPACE] = channel.ToString();
+                input[Eng.CLASS] = router.ToString();
+                input[Eng.METHOD] = method.ToString();
+                if (nodeName != null)
+                {
+                    input["nodeName"] = nodeName.ToString();
+                }
                 input.TryGetValue("nodeName", out string nickName);
                 if (!string.IsNullOrWhiteSpace(nickName))
                 {
-                    return Connector.BrokerDnsAsync(input, nickName).ConfigureAwait(false).GetAwaiter().GetResult();
+                    var micro = Connector.Micros.FirstOrDefault(m => m.Mi.Nickname == nickName)?.Mi;
+                    return Connector.BrokerDns(input, micro);
                 }
                 else
                 {
+                    input[Eng.NAMESPACE] = CompatibilityChannel(channel.ToString());
                     return Connector.BrokerDns(input);
                 }
             });
         }
-
-        private Task ApiInvoke(HttpContext context, Func<Dictionary<string, string>, string> invoke)
+        /// <summary>
+        /// AnnoApi/{channel}/{router}/{method}/{nodeName?}
+        ///     -AnnoApi/Anno.Plugs.Analyse/Trace/UserVisitTrend
+        ///     -AnnoApi/Analyse/Trace/UserVisitTrend
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        private string CompatibilityChannel(string channel)
         {
-            context.Response.ContentType = "Content-Type: application/javascript; charset=utf-8";
+            var micro = Connector.Micros.FirstOrDefault((MicroCache m) => m.Tags.Exists((string t) => t == channel));
+            if (micro == null && !channel.StartsWith("Anno.Plugs.")) {
+                channel = $"Anno.Plugs.{channel}";
+            }
+            return channel;
+        }
+
+        private async Task ApiInvoke(HttpContext context, Func<Dictionary<string, string>, string> invoke)
+        {
+            context.Response.ContentType = "application/json;charset=UTF-8";
             Dictionary<string, string> input = new Dictionary<string, string>();
             #region 接收表单参数
             var Request = context.Request;
             var headers = Request.Headers;
             try
             {
-                if (headers != null && headers.ContainsKey("X-Original-For"))
+                if (headers != null && headers.ContainsKey("X-Original-For") && !headers["X-Original-For"].ToArray()[0].StartsWith("127.0.0.1"))
                 {
                     input.Add("X-Original-For", headers["X-Original-For"].ToArray()[0]);
                 }
@@ -125,18 +187,29 @@ namespace Microsoft.AspNetCore
                 {
                     if (Request.Method == "POST")
                     {
-                        foreach (string k in Request.Form.Keys)
+                        if (Request.HasFormContentType)
                         {
-                            input.Add(k, Request.Form[k]);
-                        }
-                        foreach (IFormFile file in Request.Form.Files)
-                        {
-                            var fileName = file.Name;
-                            if (string.IsNullOrWhiteSpace(fileName))
+                            foreach (string k in Request.Form.Keys)
                             {
-                                fileName = file.FileName;
+                                input.Add(k, Request.Form[k]);
                             }
-                            input.TryAdd(fileName, file.ToBase64());
+                            foreach (IFormFile file in Request.Form.Files)
+                            {
+                                var fileName = file.Name;
+                                if (string.IsNullOrWhiteSpace(fileName))
+                                {
+                                    fileName = file.FileName;
+                                }
+                                input.TryAdd(fileName, file.ToBase64());
+                            }
+                        }
+                        else
+                        {
+                            #region 接收Body
+                            var reader = new StreamReader(Request.Body);
+                            var contentFromBody = await reader.ReadToEndAsync();
+                            input.TryAdd("body", contentFromBody);
+                            #endregion
                         }
                     }
                 }
@@ -146,7 +219,7 @@ namespace Microsoft.AspNetCore
                     {
                         if (!input.ContainsKey(k))
                         {
-                            input.Add(k, Request.Query[k]);
+                            input.TryAdd(k, Request.Query[k]);
                         }
                     }
                 }
@@ -167,9 +240,14 @@ namespace Microsoft.AspNetCore
                 input.TryAdd("AppName", vierConfig.Target.AppName);
                 input.TryAdd("AppNameTarget", vierConfig.Target.AppName);
                 TracePool.EnQueue(TracePool.CreateTrance(input), FailMessage("Trigger current limiting.", false));
-                return context.Response.WriteAsync(rltExec);
+                await context.Response.WriteAsync(rltExec);
+                return;
             }
             #endregion
+            if (Request.HasFormContentType&&Request.Form.Files.Count > 0)
+            {
+                UtilJob.NeedGc = true;
+            }
             #region 处理
             ActionResult actionResult = null;
             try
@@ -211,7 +289,7 @@ namespace Microsoft.AspNetCore
             rltd.Add("outputData", actionResult.OutputData);
             #endregion
             #endregion
-            return context.Response.WriteAsync(System.Text.Encoding.UTF8.GetString(rltd.ExecuteResult()));
+            await context.Response.WriteAsync(System.Text.Encoding.UTF8.GetString(rltd.ExecuteResult()));
         }
 
         #region 工具
@@ -237,12 +315,19 @@ namespace Microsoft.AspNetCore
             bool limit = false;
             if (vierConfig.Limit?.Enable == true)
             {
-                var ip = httpContext.Connection.RemoteIpAddress.MapToIPv4();
-
                 #region IpLimit
 
                 if (vierConfig.Limit != null)
                 {
+                    IPAddress ip = httpContext.Connection.RemoteIpAddress.MapToIPv4();
+                    var headers = httpContext.Request.Headers;
+                    if (headers != null && headers.ContainsKey("X-Original-For"))
+                    {
+                        if (IPAddress.TryParse(headers["X-Original-For"].ToArray()[0], out IPAddress iPAddress))
+                        {
+                            ip = iPAddress.MapToIPv4();
+                        }
+                    }
                     if (IsBlackRateLimit(ip))//黑名单
                     {
                         return true;
@@ -256,20 +341,26 @@ namespace Microsoft.AspNetCore
                     {
                         //IP限流策略
                         Iplimit iplimit = MatchIpLimit(ip);
-                        var limitingService = LimitingFactory.Build(TimeSpan.FromSeconds(iplimit.timeSpan)
-                              , LimitingType.LeakageBucket
-                              , (int)iplimit.rps
-                              , (int)iplimit.limitSize);
-                        limitInfo = new LimitInfo()
+                        if (iplimit != null)
                         {
-                            Time = DateTime.Now,
-                            limitingService = limitingService
-                        };
-                        _rateLimitPool.TryAdd(ip.ToString(), limitInfo);
+                            var limitingService = LimitingFactory.Build(TimeSpan.FromSeconds(iplimit.timeSpan)
+                                  , LimitingType.LeakageBucket
+                                  , (int)iplimit.rps
+                                  , (int)iplimit.limitSize);
+                            limitInfo = new LimitInfo()
+                            {
+                                Time = DateTime.Now,
+                                limitingService = limitingService
+                            };
+                            _rateLimitPool.TryAdd(ip.ToString(), limitInfo);
+                        }
                     }
-                    //ipLimit.Request() ==true 代表不受限制
-                    limitInfo.Time = DateTime.Now;
-                    limit = (limitInfo.limitingService.Request() == false);
+                    if (limitInfo != null)
+                    {
+                        //ipLimit.Request() ==true 代表不受限制
+                        limitInfo.Time = DateTime.Now;
+                        limit = (limitInfo.limitingService.Request() == false);
+                    }
                     if (limit)
                     {
 #if DEBUG
@@ -477,6 +568,7 @@ namespace Microsoft.AspNetCore
         {
             _next = next;
             configuration.Bind(viperConfig);
+            DefaultConfigManager.SetDefaultConnectionPool(500, 3, 50);
             DefaultConfigManager
                 .SetDefaultConfiguration(viperConfig.Target.AppName
                 , viperConfig.Target.IpAddress
@@ -559,4 +651,26 @@ namespace Microsoft.AspNetCore
         }
     }
     #endregion
+
+    //public class FileResult : IHttpActionResult
+    //{
+    //    public FileResult(string filePath)
+    //    {
+    //        if (filePath == null)
+    //            throw new ArgumentNullException(nameof(filePath));
+
+    //        FilePath = filePath;
+    //    }
+
+    //    public string FilePath { get; }
+
+    //    public Task<System.Net.Http.HttpResponseMessage> ExecuteAsync(System.Threading.CancellationToken cancellationToken)
+    //    {
+    //        var response = new System.Net.Http.HttpResponseMessage(HttpStatusCode.OK);
+    //        response.Content = new System.Net.Http.StreamContent(File.OpenRead(FilePath));
+    //        var contentType = MimeMapping.GetMimeMapping(Path.GetExtension(FilePath));
+    //        response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+    //        return Task.FromResult(response);
+    //    }
+    //}
 }

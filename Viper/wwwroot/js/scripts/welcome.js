@@ -14,17 +14,14 @@ $(function () {
     Disk([]);
 });
 function PageInit() {
-    var args = bif.GetUrlParms();
+    var args = anno.GetUrlParms();
     if (args.appName !== undefined) {
         defaultService = args.appName;
     }
-    var input = bif.getInput();
-    input.channel = "Anno.Plugs.Logic";
-    input.router = "Report";
-    input.method = "GetServiceReport";
+    var input = anno.getInput();
     //input.startDate = new Date().toLocaleDateString();
     //input.endDate = "2019-10-01";
-    bif.process(input, function (data) {
+    anno.process(input,"Anno.Plugs.Logic/Report/GetServiceReport", function (data) {
         var myChart = echarts.init(document.getElementById('trace'));
         // 指定图表的配置项和数据
         var option = {
@@ -278,6 +275,9 @@ function StartMonitoring() {
         SetWatch(connection, defaultService);
     });
     connection.on("SendMonitorData", function (_data) {
+        if(_data.tag!==vm.name){
+            return;
+        }
         var _date = new Date(_data.currentTime);
         date.push([_date.getHours(), _date.getMinutes(), _date.getSeconds()].join(':'));
 
@@ -341,6 +341,9 @@ function StartMonitoring() {
 }
 
 function connect(conn) {
+    if (conn.connectionState === "Connected") {
+        return;
+    }
     conn.start().then(function () {
         SetWatch(conn, defaultService);
     }).catch(function (err) {

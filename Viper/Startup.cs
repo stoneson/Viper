@@ -41,7 +41,6 @@ namespace Viper.GetWay
                 app.UseStatusCodePagesWithReExecute("/error/Index/404");
             }
             app.UseResponseCompression();
-
             //Ìí¼ÓMIME
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".vue"] = "text/plain";

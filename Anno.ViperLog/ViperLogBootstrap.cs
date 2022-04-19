@@ -25,7 +25,7 @@ namespace Anno.ViperLog
                 var builder = IocLoader.GetAutoFacContainerBuilder();
                 builder.RegisterInstance<ILogService>(AnnoProxyBuilder.GetService<ILogService>());
             }
-            catch {
+            catch(Exception ex) {
                 var builder = IocLoader.GetServiceDescriptors(); 
                 builder.AddSingleton<ILogService>(AnnoProxyBuilder.GetService<ILogService>());
             }

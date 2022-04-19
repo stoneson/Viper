@@ -34,7 +34,7 @@ namespace Viper.GetWay
                      * active 为prod 的时候关闭日志 None，默认日志级别 Information
                      */
                     var active = Anno.Rpc.Server.ArgsValue.GetValueByName("-active", args);
-                    LogLevel logLevel = LogLevel.Information;
+                    LogLevel logLevel = LogLevel.Debug;
                     if (!string.IsNullOrWhiteSpace(active)&&active.Equals("prod"))
                     {
                         logLevel = LogLevel.None;

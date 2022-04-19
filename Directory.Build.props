@@ -1,8 +1,7 @@
 <Project>
   <PropertyGroup>
-    <DeveloperBuildCoreTfms>net5</DeveloperBuildCoreTfms>
+    <DeveloperBuildCoreTfms>net6.0</DeveloperBuildCoreTfms>
     <StandardTfms>netstandard2.0</StandardTfms>
-    <Version>1.0.3.5</Version>
-    <ServerName>ViperService</ServerName>
+    <Version>1.7.0.1</Version>
   </PropertyGroup>
 </Project>

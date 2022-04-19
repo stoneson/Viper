@@ -18,7 +18,7 @@
                   stripe
                   trigger="hover"
                   size="mini"
-                  max-height="429"
+                  :max-height="window.innerHeight-98"
                   style="width: 100%;"
                   :cell-style="tableCellStyle">
             <el-table-column type="index"
@@ -190,10 +190,7 @@
             },
             loadData: function (page, pagesize) {
                 var that = this;
-                var input = bif.getInput();
-                input.channel = "Anno.Plugs.Trace";
-                input.router = "Trace";
-                input.method = "GetTrace";
+                var input = anno.getInput();
                 if(that.form.title!==null&&that.form.title!==""){
                     input.where =JSON.stringify(this.builderWhere(null,that.form.title));
                 }
@@ -208,7 +205,7 @@
 
                     input.pagesize = 20;
                 }
-                bif.process(input, function (data) {
+                anno.process(input, "Anno.Plugs.Trace/Trace/GetTrace", function (data) {
                     at.xData = data.Rows;
                     at.total = parseInt(data.Total);
                 });

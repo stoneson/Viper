@@ -14,8 +14,7 @@ namespace Anno.Plugs.TraceService
     /// </summary>
     public class TraceModule : BaseModule
     {
-        private static readonly EngineData.SysInfo.UseSysInfoWatch Usi = new EngineData.SysInfo.UseSysInfoWatch();
-        private readonly SqlSugar.SqlSugarClient _db;
+        private readonly SqlSugarClient _db;
         public TraceModule()
         {
             _db = Infrastructure.DbInstance.Db;
@@ -29,7 +28,7 @@ namespace Anno.Plugs.TraceService
         {
             List<sys_trace> traces = Request<List<sys_trace>>("traces");
             traces.ForEach(t => { t.ID = IdWorker.NextId(); });
-            _db.Insertable<sys_trace>(traces).With(SqlWith.NoLock).ExecuteCommand();
+            _db.Insertable<sys_trace>(traces).ExecuteCommand();
             return new ActionResult(true, null, null, null);
         }
         /// <summary>
@@ -77,13 +76,13 @@ namespace Anno.Plugs.TraceService
             if (string.IsNullOrWhiteSpace(tid))
             {
                 string gId = RequestString("GId");
-                ts = _db.Ado.SqlQuery<sys_trace>($"select * from sys_trace where GlobalTraceId=@gId;",new { gId}).ToList();
+                ts = _db.Ado.SqlQuery<sys_trace>($"select * from sys_trace where GlobalTraceId=@gId;", new { gId }).ToList();
             }
             else
             {
                 string sql = @"SELECT  * FROM  sys_trace 
-WHERE  GlobalTraceId=(SELECT  c.GlobalTraceId FROM sys_trace as c WHERE c.TraceId=@tid LIMIT 1)";
-                ts = _db.Ado.SqlQuery<sys_trace>(sql,new { tid }).ToList();
+WHERE  GlobalTraceId in(SELECT  c.GlobalTraceId FROM sys_trace as c WHERE c.TraceId=@tid)";
+                ts = _db.Ado.SqlQuery<sys_trace>(sql, new { tid }).ToList();
             }
             var output = new Dictionary<string, object> { { "#Total", ts.Count }, { "#Rows", ts } };
             return new ActionResult(true, null, output);
@@ -98,7 +97,7 @@ WHERE  GlobalTraceId=(SELECT  c.GlobalTraceId FROM sys_trace as c WHERE c.TraceI
         public ActionResult LogBatch(List<sys_log> logs)
         {
             logs.ForEach(t => { t.ID = IdWorker.NextId(); });
-            _db.Insertable<sys_log>(logs).With(SqlWith.NoLock).ExecuteCommand();
+            _db.Insertable(logs).ExecuteCommand();
             return new ActionResult();
         }
 
