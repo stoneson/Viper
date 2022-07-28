@@ -24,7 +24,7 @@ namespace Viper.GetWay
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    var urls = Anno.Rpc.Server.ArgsValue.GetValueByName("-h", args);
+                    var urls = Anno.ArgsValue.GetValueByName("-h", args);
                     webBuilder.UseStartup<Startup>();
                     if (!string.IsNullOrWhiteSpace(urls))
                     {
@@ -33,7 +33,7 @@ namespace Viper.GetWay
                     /**
                      * active 为prod 的时候关闭日志 None，默认日志级别 Information
                      */
-                    var active = Anno.Rpc.Server.ArgsValue.GetValueByName("-active", args);
+                    var active = Anno.ArgsValue.GetValueByName("-active", args);
                     LogLevel logLevel = LogLevel.Debug;
                     if (!string.IsNullOrWhiteSpace(active)&&active.Equals("prod"))
                     {
