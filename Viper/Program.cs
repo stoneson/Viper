@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Anno.Const.Enum;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,12 +43,33 @@ namespace Viper.GetWay
                         logLevel = LogLevel.None;
                     }
                     webBuilder
-                    .UseAnnoSvc()
+                        .UseAnnoSvc((setupFilter,endpoints) =>
+                        {
+                            endpoints.Map("SysMg/Api", context =>
+                            {
+                                return setupFilter.ApiInvoke(context, (input) =>
+                                  {
+                                      return Anno.Rpc.Client.Connector.BrokerDns(input);
+                                  });
+                            });
+                            endpoints.Map("AnnoApi/ServiceInstance", ServiceInstanceApi);
+                            endpoints.Map("AnnoApi/DeployService", DeployServiceApi);
+                            //endpoints.Map(Eng.BasePath + "/{channel}/{router}/{method}/{param1?}/{param2?}/{param3?}/{param4?}/{param5?}", AnnoApi);
+                        })
                         .ConfigureLogging(log => log.SetMinimumLevel(logLevel))
                         .UseContentRoot(Directory.GetCurrentDirectory())
                         .UseKestrel(option =>
                         {
                             option.Limits.MaxRequestBodySize = 200 * 1024 * 1000;
+
+                            //if (Anno.Const.AppSettings.GetAppSettings<bool>("UseHttps", "false"))
+                            //{
+                            //    option.ListenLocalhost(Anno.Const.AppSettings.GetAppSettings<int>("ListenPort", "5001"), opts => opts.UseHttps());
+                            //}
+                            //else
+                            //{
+                            //    option.ListenAnyIP(Anno.Const.AppSettings.GetAppSettings<int>("ListenPort", "5000"));
+                            //}
                         }).ConfigureServices(service =>
                         {
                             service.Configure<FormOptions>(options =>
@@ -54,5 +78,32 @@ namespace Viper.GetWay
                             });
                         });
                 });
+
+        private static async Task ServiceInstanceApi(HttpContext context)
+        {
+            context.Response.ContentType = "application/javascript; charset=utf-8";
+            var instances = UtilService.GetServiceInstances();
+            context.Response.StatusCode = 200;
+            Dictionary<string, object> rlt = new Dictionary<string, object>();
+            rlt.Add("output", null);
+            rlt.Add("outputData", instances);
+            rlt.Add("status", true);
+            rlt.Add("msg", null);
+            var rltExec = System.Text.Encoding.UTF8.GetString(rlt.ExecuteResult());
+            await context.Response.WriteAsync(rltExec);
+        }
+        private static async Task DeployServiceApi(HttpContext context)
+        {
+            context.Response.ContentType = "application/javascript; charset=utf-8";
+            var instances = UtilService.GetDeployServices();
+            context.Response.StatusCode = 200;
+            Dictionary<string, object> rlt = new Dictionary<string, object>();
+            rlt.Add("output", null);
+            rlt.Add("outputData", instances);
+            rlt.Add("status", true);
+            rlt.Add("msg", null);
+            var rltExec = System.Text.Encoding.UTF8.GetString(rlt.ExecuteResult());
+            await context.Response.WriteAsync(rltExec);
+        }
     }
 }

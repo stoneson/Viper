@@ -6,13 +6,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <Content Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\js\httpVue\axios.min.js" />
     <Content Remove="wwwroot\js\httpVue\axios.min.map" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vive.Anno.Rpc.Server" Version="1.7.1.72" />
-    <!--<PackageReference Include="IPAddressRange" Version="4.2.0" />-->
+    <Compile Include="Extensions\Utils\UtilService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Vive.Anno.Api.GateWay" Version="1.7.1.73" />
   </ItemGroup>
 
   <ItemGroup>

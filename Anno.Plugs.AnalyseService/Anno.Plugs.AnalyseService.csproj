@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Vive.Anno.Core" Version="1.7.1.73" />
+    <PackageReference Include="IP2Region" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Anno.Infrastructure\Anno.Infrastructure.csproj" />
+    <ProjectReference Include="..\Anno.ViperLog\Anno.ViperLog.csproj" />
+    <ProjectReference Include="..\Trace\Anno.Domain.Dto\Anno.Domain.Dto.csproj" />
+    <ProjectReference Include="..\Trace\Anno.Repository\Anno.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -6,15 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Rpc.Server" Version="1.7.1.72" />
+	  <PackageReference Include="Vive.Anno.Rpc.Server" Version="1.7.1.73" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Anno.Plugs.AnalyseService\Anno.Plugs.AnalyseService.csproj" />
     <ProjectReference Include="..\Anno.Plugs.DLockService\Anno.Plugs.DLockService.csproj" />
     <ProjectReference Include="..\Anno.Plugs.LogicService\Anno.Plugs.LogicService.csproj" />
     <ProjectReference Include="..\Anno.Plugs.MonitorService\Anno.Plugs.MonitorService.csproj" />
     <ProjectReference Include="..\Anno.Plugs.ViperService\Anno.Plugs.ViperService.csproj" />
     <ProjectReference Include="..\Anno.Plugs.TraceService\Anno.Plugs.TraceService.csproj" />
+    <ProjectReference Include="..\Samples\Plugs\Anno.Plugs.HelloWorldService\Anno.Plugs.HelloWorldService.csproj" />
+    <ProjectReference Include="..\Samples\Plugs\Anno.Plugs.SoEasyService\Anno.Plugs.SoEasyService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,6 +8,7 @@ using Anno.EngineData.SysInfo;
 using Anno.EngineData;
 using Anno.Rpc.Client;
 using Viper.GetWay.Hubs.Util;
+using Microsoft.AspNetCore;
 
 namespace Viper.GetWay.Hubs
 {
@@ -20,8 +21,8 @@ namespace Viper.GetWay.Hubs
         private static readonly UseSysInfoWatch Usi = new UseSysInfoWatch();
         private static readonly object LockCron = new object();
         private static IHubContext<MonitorHub> _monitorContext;
-        private static ViperConfig viperConfig = new ViperConfig();
-        public TaskManager(IHubContext<MonitorHub> monitorHub, ViperConfig _viperConfig)
+        private static AnnoGatewayConfig viperConfig = new AnnoGatewayConfig();
+        public TaskManager(IHubContext<MonitorHub> monitorHub, AnnoGatewayConfig _viperConfig)
         {
             viperConfig = _viperConfig;
             if (CronDaemon.Status == DaemonStatus.Stop)

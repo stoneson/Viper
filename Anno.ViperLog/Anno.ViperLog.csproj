@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Rpc.Client.DynamicProxy" Version="1.7.1.72" />
+	  <PackageReference Include="Vive.Anno.Rpc.Client.DynamicProxy" Version="1.7.1.73" />
   </ItemGroup>
 
 </Project>

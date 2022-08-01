@@ -5,6 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vive.Anno.Core" Version="1.7.1.72" />
+    <PackageReference Include="Vive.Anno.Core" Version="1.7.1.73" />
   </ItemGroup>
 </Project>
