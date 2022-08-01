@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Core" Version="1.7.1.73" />
+	  <PackageReference Include="Vive.Anno.Core" Version="1.7.1.730" />
     <PackageReference Include="sqlSugarCore" Version="5.0.0.15" />
   </ItemGroup>
 

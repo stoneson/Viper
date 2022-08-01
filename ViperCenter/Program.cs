@@ -1,4 +1,5 @@
-﻿using Anno.Rpc.Center;
+﻿using Anno.Log;
+using Anno.Rpc.Center;
 using System;
 
 namespace ViperCenter
@@ -17,9 +18,14 @@ namespace ViperCenter
                 , (service, noticeType) =>//上线下线
                 {
                     DingTalkNotify.Notice(service,noticeType);
+                    
+                    Log.WriteLine(noticeType.ToString() + ":\t\n" + Newtonsoft.Json.JsonConvert.SerializeObject(service));
                 }, (newService, oldService) =>//服务配置更改
                 {
-                    DingTalkNotify.ChangeNotice(newService, oldService);
+                    DingTalkNotify.ChangeNotice(newService, oldService); 
+                    
+                    Log.WriteLine("NewConfig:\t\n" + Newtonsoft.Json.JsonConvert.SerializeObject(newService));
+                    Log.WriteLine("OldConfig:\t\n" + Newtonsoft.Json.JsonConvert.SerializeObject(oldService));
                 });
         }
     }

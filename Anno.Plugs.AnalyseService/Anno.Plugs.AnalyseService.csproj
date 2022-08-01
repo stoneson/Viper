@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Core" Version="1.7.1.73" />
+	  <PackageReference Include="Vive.Anno.Core" Version="1.7.1.730" />
     <PackageReference Include="IP2Region" Version="1.2.0" />
   </ItemGroup>
 

@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Plugs.MonitorService" Version="1.7.1.73" />
-      <PackageReference Include="Vive.Anno.Rpc.Server" Version="1.7.1.73" />
+	  <PackageReference Include="Vive.Anno.Plugs.MonitorService" Version="1.7.1.730" />
+      <PackageReference Include="Vive.Anno.Rpc.Server" Version="1.7.1.730" />
   </ItemGroup>
 
   <ItemGroup>
