@@ -16,14 +16,21 @@ namespace ViperCenter
     public static class DingTalkNotify
     {
         public static string access_token = string.Empty;
+        public static string access_keyWord = string.Empty;
         public static string notifyUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
 
         public static void Notice(ServiceInfo service, NoticeType noticeType)
         {
             Init();
+
             var requestUrl = $"{notifyUrl}{access_token}";
+
+            //long timestamp = ((DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000);
+            //string sign = addSign(timestamp);
+            //requestUrl = requestUrl + "&timestamp=" + timestamp + "&sign=" + sign;
+
             var rlt = requestUrl
-                   .WithHeader("Content-Type", "application/json")
+                   .WithHeader("Content-Type", "application/json;charset=utf-8")
                    .PostJsonAsync(
                    new
                    {
@@ -40,9 +47,15 @@ namespace ViperCenter
         public static void ChangeNotice(ServiceInfo newService, ServiceInfo oldService)
         {
             Init();
+
             var requestUrl = $"{notifyUrl}{access_token}";
+
+            //long timestamp = ((DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000);
+            //string sign = addSign(timestamp);
+            //requestUrl = requestUrl + "&timestamp=" + timestamp + "&sign=" + sign;
+
             var rlt = requestUrl
-                .WithHeader("Content-Type", "application/json")
+                .WithHeader("Content-Type", "application/json;charset=utf-8")
                 .PostJsonAsync(
                 new
                 {
@@ -74,6 +87,7 @@ namespace ViperCenter
         public static string BuildMsg(ServiceInfo service)
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"> #### 消息来源：**{access_keyWord}**");
             sb.AppendLine($"> #### 服务地址：**{service.Ip}:{service.Port}**");
             sb.AppendLine($"> #### 超时时间：**{service.Timeout}**(毫秒)");
             sb.AppendLine($"> #### 服务权重：**{service.Weight}**");
@@ -91,6 +105,28 @@ namespace ViperCenter
             if (string.IsNullOrWhiteSpace(access_token))
             {
                 CustomConfiguration.Settings.TryGetValue("DingTalkNotifyToken", out access_token);
+            }
+
+            if (string.IsNullOrWhiteSpace(access_keyWord))
+            {
+                CustomConfiguration.Settings.TryGetValue("DingTalkNotifyKeyWord", out access_keyWord);
+            }
+            if (string.IsNullOrWhiteSpace(access_keyWord))
+            {
+                access_keyWord = "注册中心";
+            }
+        }
+        private static string addSign(long timestamp)
+        {
+            string secret1 = access_token;
+            string stringToSign = timestamp + "\n" + secret1;
+            var encoding = new System.Text.ASCIIEncoding();
+            byte[] keyByte = encoding.GetBytes(secret1);
+            byte[] messageBytes = encoding.GetBytes(stringToSign);
+            using (var hmacsha256 = new System.Security.Cryptography.HMACSHA256(keyByte))
+            {
+                byte[] hashmessage = hmacsha256.ComputeHash(messageBytes);
+                return System.Web.HttpUtility.UrlEncode(Convert.ToBase64String(hashmessage), Encoding.UTF8);
             }
         }
         /// <summary>
