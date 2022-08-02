@@ -60,7 +60,7 @@ namespace Viper.GetWay
                         .UseContentRoot(Directory.GetCurrentDirectory())
                         .UseKestrel(option =>
                         {
-                            option.Limits.MaxRequestBodySize = 200 * 1024 * 1000;
+                            option.Limits.MaxRequestBodySize = long.MaxValue;// 200 * 1024 * 1000;
 
                             //if (Anno.Const.AppSettings.GetAppSettings<bool>("UseHttps", "false"))
                             //{
