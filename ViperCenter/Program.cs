@@ -1,4 +1,5 @@
-﻿using Anno.Log;
+﻿using Anno;
+using Anno.Log;
 using Anno.Rpc.Center;
 using System;
 
@@ -19,13 +20,13 @@ namespace ViperCenter
                 {
                     DingTalkNotify.Notice(service,noticeType);
                     
-                    Log.WriteLine(noticeType.ToString() + ":\t\n" + Newtonsoft.Json.JsonConvert.SerializeObject(service));
+                    Log.WriteLine(noticeType.ToString() + ":\t\n" + JsonHelper.SerializeObjectToJson(service));
                 }, (newService, oldService) =>//服务配置更改
                 {
                     DingTalkNotify.ChangeNotice(newService, oldService); 
                     
-                    Log.WriteLine("NewConfig:\t\n" + Newtonsoft.Json.JsonConvert.SerializeObject(newService));
-                    Log.WriteLine("OldConfig:\t\n" + Newtonsoft.Json.JsonConvert.SerializeObject(oldService));
+                    Log.WriteLine("NewConfig:\t\n" + JsonHelper.SerializeObjectToJson(newService));
+                    Log.WriteLine("OldConfig:\t\n" + JsonHelper.SerializeObjectToJson(oldService));
                 });
         }
     }

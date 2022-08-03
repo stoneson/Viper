@@ -251,7 +251,7 @@ namespace Anno.Redis
             //    byte[] objectDataAsStream = memoryStream.ToArray();
             //    return objectDataAsStream;
             //}
-            return JsonConvert.SerializeObject(o);
+            return JsonHelper.SerializeObjectToJson(o);
         }
 
         /// <summary>

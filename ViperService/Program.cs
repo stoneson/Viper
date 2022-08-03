@@ -35,7 +35,7 @@ namespace ViperService
              */
             Bootstrap.StartUp(args, () =>//服务配置文件读取完成后回调(服务未启动)
             {
-                //Anno.Const.SettingService.TraceOnOff = true;
+                Anno.Const.SettingService.TraceOnOff = true;
 
                 /*
                  * 功能插件选择是Thrift还是 Grpc

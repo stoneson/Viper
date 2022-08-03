@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Rpc.Server" Version="1.7.1.730" />
+	  <PackageReference Include="Vive.Anno.Rpc.Server" Version="1.7.1.731" />
   </ItemGroup>
 
   <ItemGroup>

@@ -51,7 +51,7 @@ namespace Anno.ViperLog.Imp
             var msg = string.Empty;
             try
             {
-                msg = Newtonsoft.Json.JsonConvert.SerializeObject(logStr);
+                msg = JsonHelper.SerializeObjectToJson(logStr);
             }
             catch
             {

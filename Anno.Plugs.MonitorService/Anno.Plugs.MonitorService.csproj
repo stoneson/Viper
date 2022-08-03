@@ -21,6 +21,6 @@
   <ItemGroup>
     <Content Include="$(SolutionDir)Viper\wwwroot\img\logo.jpg" Link="logo.jpg" PackagePath="\" />
     <Content Include="$(SolutionDir)LICENSE" Link="LICENSE" PackagePath="\" />
-    <PackageReference Include="Vive.Anno.Core" Version="1.7.1.730" />
+    <PackageReference Include="Vive.Anno.Core" Version="1.7.1.731" />
   </ItemGroup>
 </Project>
