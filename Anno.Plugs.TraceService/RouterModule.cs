@@ -30,13 +30,13 @@ namespace Anno.Plugs.TraceService
             input.Add(CONST.Opt, CONST.FindByApp);
             input.Add(CONST.App, appName);
             string rlt = StorageEngine.Invoke(input);
-            List<AnnoDataOutPut> annoDataOutPuts = new List<AnnoDataOutPut>();
+            List<AnnoApiDoc> annoDataOutPuts = new List<AnnoApiDoc>();
             RoutingInfomationDto routing = Newtonsoft.Json.JsonConvert.DeserializeObject<RoutingInfomationDto>(rlt);
             if (routing.Data != null && routing.Data.Count > 0)
             {
                 routing.Data.ForEach(d =>
                 {
-                    annoDataOutPuts.Add(new AnnoDataOutPut()
+                    annoDataOutPuts.Add(new AnnoApiDoc()
                     {
                         App = d.App,
                         Channel = d.Channel,
