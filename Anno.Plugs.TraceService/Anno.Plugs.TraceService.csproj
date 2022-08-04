@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="RoutingInfomationDto.cs" />
+    <Compile Remove="ServiceInformation.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="Vive.Anno.Rpc.Client" Version="1.7.1.731" />
   </ItemGroup>
 

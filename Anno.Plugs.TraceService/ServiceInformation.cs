@@ -10,32 +10,32 @@ using System.Text;
 
 namespace Anno.Plugs.TraceService
 {
-    public class ServiceInformation
-    {
-        /// <summary>
-        /// 昵称
-        /// </summary>
-        public string Nickname { get; set; }
-        /// <summary>
-        /// 功能列表
-        /// </summary>
-        public List<string> Tags { get; set; }
-        /// <summary>
-        /// 服务地址
-        /// </summary>
-        public string Host { get; set; }
-        /// <summary>
-        /// 服务端口
-        /// </summary>
-        public int Port { get; set; }
-        /// <summary>
-        /// 超时时间毫秒
-        /// </summary>
-        public int Timeout { get; set; }
-        /// <summary>
-        /// 服务权重
-        /// </summary>
-        public int Weight { get; set; }
+    //public class ServiceInformation
+    //{
+    //    /// <summary>
+    //    /// 昵称
+    //    /// </summary>
+    //    public string Nickname { get; set; }
+    //    /// <summary>
+    //    /// 功能列表
+    //    /// </summary>
+    //    public List<string> Tags { get; set; }
+    //    /// <summary>
+    //    /// 服务地址
+    //    /// </summary>
+    //    public string Host { get; set; }
+    //    /// <summary>
+    //    /// 服务端口
+    //    /// </summary>
+    //    public int Port { get; set; }
+    //    /// <summary>
+    //    /// 超时时间毫秒
+    //    /// </summary>
+    //    public int Timeout { get; set; }
+    //    /// <summary>
+    //    /// 服务权重
+    //    /// </summary>
+    //    public int Weight { get; set; }
 
-    }
+    //}
 }

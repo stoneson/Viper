@@ -43,7 +43,8 @@ namespace Anno.Plugs.TraceService
                         Router = d.Router,
                         Method = d.Method,
                         Desc = d.ValueObj.Desc,
-                        Value = d.ValueObj
+                        Value = d.ValueObj,
+                        RoutePrefix = d.RoutePrefix
                     });
 
                 });
@@ -77,6 +78,7 @@ namespace Anno.Plugs.TraceService
                         serviceInformation.Timeout = service.Mi.Timeout;
                         serviceInformation.Weight = service.Mi.Weight;
                         serviceInformation.Nickname = service.Mi.Nickname;
+                        serviceInformation.Path = service.Mi.Path;
 
                         serviceInformations.Add(serviceInformation);
                     }
