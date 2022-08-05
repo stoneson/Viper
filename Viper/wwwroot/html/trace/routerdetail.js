@@ -84,6 +84,7 @@ function AddParameter() {
 function Debug() {
     var input = anno.getInput();
     var manager = $("#grid").ligerGetGridManager();
+    manager.endEdit();
     var gdata = manager.getData();
 
     $.each(gdata, function(i, item) {
