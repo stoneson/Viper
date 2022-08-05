@@ -10,8 +10,9 @@
                           prefix-icon="el-icon-search"
                           placeholder="服务名称"
                           value="value"
-                          v-model="form.title"></el-input>
+                          v-model="form.title" ></el-input>
                 <el-button type="primary" v-on:keyup.enter="onQuery" @click="onQuery">查询</el-button>
+                <el-button type="info" @keyup.esc="window.history.go(-1)" @click="window.history.go(-1)">返回</el-button>
             </el-form-item>
         </el-form>
     </div>

@@ -89,8 +89,8 @@ function Debug() {
     $.each(gdata, function(i, item) {
         input[item.Name] = item.Pvalue;
     });
-    var url = (data.Channel.endsWith('Service') ? data.Channel.substring(0, data.Channel.length - 7) : data.Channel)
-        + "/" + (data.Channel.endsWith('Module') ? data.Router.substring(0, data.Router.length - 6) : data.Router) + "/" + data.Method;
+    var url = (data.Channel.toLowerCase().endsWith('service') ? data.Channel.substring(0, data.Channel.length - 7) : data.Channel)
+        + "/" + (data.Router.toLowerCase().endsWith('module') ? data.Router.substring(0, data.Router.length - 6) : data.Router) + "/" + data.Method;
     anno.process(input, url, function (ds) {
         data.Rlt = JSON.stringify(ds);
         form.setData(data);
