@@ -62,16 +62,27 @@ namespace Viper.GetWay
                         {
                             option.Limits.MaxRequestBodySize = long.MaxValue;// 200 * 1024 * 1000;
 
-                            //if (Anno.Const.AppSettings.GetAppSettings<bool>("UseHttps", "false"))
-                            //{
-                            //    option.ListenLocalhost(Anno.Const.AppSettings.GetAppSettings<int>("ListenPort", "5001"), opts => opts.UseHttps());
-                            //}
-                            //else
-                            //{
-                            //    option.ListenAnyIP(Anno.Const.AppSettings.GetAppSettings<int>("ListenPort", "5000"));
-                            //}
-                        }).ConfigureServices(service =>
+                            if (Anno.Const.AppSettings.GetAppSettings<bool>("UseHttps", "false"))
+                            {
+                                option.ListenLocalhost(Anno.Const.AppSettings.GetAppSettings<int>("ListenPort", "5001"), opts => opts.UseHttps());
+                            }
+                            else
+                            {
+                                option.ListenAnyIP(Anno.Const.AppSettings.GetAppSettings<int>("ListenPort", "5000"));
+                            }
+                        })
+                        .ConfigureServices(service =>
                         {
+                            //添加cors 服务 配置跨域处理   
+                            service.AddCors(options =>
+                            {
+                                options.AddPolicy("any", builder =>
+                                {
+                                    builder.AllowAnyHeader().AllowAnyMethod()//.WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
+                                                                             //.AllowCredentials()//指定处理cookie
+                                .AllowAnyOrigin(); //允许任何来源的主机访问
+                                });
+                            });
                             service.Configure<FormOptions>(options =>
                             {
                                 options.MultipartBodyLengthLimit = long.MaxValue;

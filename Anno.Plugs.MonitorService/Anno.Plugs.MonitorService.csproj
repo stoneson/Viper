@@ -12,7 +12,7 @@
   <PropertyGroup>
     <PackageIcon>logo.jpg</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>服务资源监控扩展插件</Description>
