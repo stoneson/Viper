@@ -276,7 +276,7 @@
             ExeCmd: function (row, action, deploySecret) {
                 var that = this;
                 var input = new FormData();
-                var url = "Anno.Plugs.Deploy/DeployManager/" + action;
+                var url = "Anno.Plugs.Deploy/DeployManager/" + action + "?nodeName=" + row.NodeName;
                 input.append("workingName", row.WorkingDirectory);
                 input.append("nodeName", row.NodeName);
                 input.append("deploySecret", deploySecret);
@@ -285,7 +285,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    contentType: false,
+                    //contentType: "application/x-www-form-urlencoded",
                     processData: false,
                     success: function (data) {
                         if (data.status) {
@@ -340,7 +340,7 @@
             },
             getDeployServiceByNode: function () {
                 var that = this;
-                var url = "Anno.Plugs.Deploy/DeployManager/GetServices"
+                var url = "Anno.Plugs.Deploy/DeployManager/GetServices?nodeName=" + that.formData.nodeName;
                 var input = new FormData();
                 input.append("nodeName", that.formData.nodeName);
                 $.ajax({
@@ -348,7 +348,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    contentType: false,
+                    //contentType: "application/x-www-form-urlencoded",
                     processData: false,
                     success: function (data) {
                         if (data.status) {
@@ -386,7 +386,7 @@
             CopyServiceHandle: function () {
                 var that = this;
                 var input = new FormData();
-                var url = "Anno.Plugs.Deploy/DeployManager/DispatchService";
+                var url = "Anno.Plugs.Deploy/DeployManager/DispatchService?nodeName=" + that.copyService.nodeName;
                 input.append("nodeName", that.copyService.NodeName);
 
                 input.append("ReceiverNodeName", that.copyService.ReceiverNodeName);
@@ -400,7 +400,7 @@
                     dataType: "json",
                     url:that.getUrl(url),
                     data: input,
-                    contentType: false,
+                    //contentType: "application/x-www-form-urlencoded",
                     processData: false,
                     success: function (data) {
                         if (data.status == true) {

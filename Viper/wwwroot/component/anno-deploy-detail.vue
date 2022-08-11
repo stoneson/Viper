@@ -226,7 +226,7 @@
                 var that = this;
                 that.fullscreenLoading = true;
                 var input = new FormData();
-                var url = "Anno.Plugs.Deploy/FileManager/UpLoadFile"
+                var url = "Anno.Plugs.Deploy/FileManager/UpLoadFile?nodeName=" + that.queryArgs.nodeName;
                 input.append("nodeName", that.formData.nodeName);
                 input.append("formData",
                     JSON.stringify(
@@ -256,7 +256,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    contentType: false,
+                    //contentType: "application/x-www-form-urlencoded",
                     processData: false,
                     success: function (data) {
                         if (data.status) {
@@ -310,7 +310,7 @@
             getServiceByWorkingName: function () {
                 var that = this;
                 var input = new FormData();
-                var url = "Anno.Plugs.Deploy/DeployManager/GetServiceByWorkingName";
+                var url = "Anno.Plugs.Deploy/DeployManager/GetServiceByWorkingName?nodeName=" + that.queryArgs.nodeName;
                 input.append("nodeName", that.queryArgs.nodeName);
                 input.append("workingName", that.queryArgs.workingDirectory);
                 $.ajax({
@@ -318,7 +318,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    contentType: false,
+                    //contentType: "application/x-www-form-urlencoded",
                     processData: false,
                     success: function (data) {
                         if (data.status) {

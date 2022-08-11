@@ -73,6 +73,13 @@ namespace Viper.GetWay
                 endpoints.MapHub<Hubs.MonitorHub>("/MonitorHub");
                 endpoints.MapControllerRoute("default", "{Controller=Home}/{action=Index}/{id?}");
             });
+            //app.Use(next => new RequestDelegate(
+            //     async context =>
+            //     {
+            //         context.Request.EnableBuffering();
+            //         await next(context);
+            //     }
+            //   ));
             app.UseAnnoSwagger(env);
         }
     }
