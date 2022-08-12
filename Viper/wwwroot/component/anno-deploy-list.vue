@@ -285,7 +285,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    //contentType: "application/x-www-form-urlencoded",
+                    contentType: false,
                     processData: false,
                     success: function (data) {
                         if (data.status) {
@@ -348,7 +348,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    //contentType: "application/x-www-form-urlencoded",
+                    contentType: false,
                     processData: false,
                     success: function (data) {
                         if (data.status) {
@@ -400,7 +400,7 @@
                     dataType: "json",
                     url:that.getUrl(url),
                     data: input,
-                    //contentType: "application/x-www-form-urlencoded",
+                    contentType: false,
                     processData: false,
                     success: function (data) {
                         if (data.status == true) {

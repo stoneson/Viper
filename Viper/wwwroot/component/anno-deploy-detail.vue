@@ -256,7 +256,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    //contentType: "application/x-www-form-urlencoded",
+                    contentType: false,
                     processData: false,
                     success: function (data) {
                         if (data.status) {
@@ -270,6 +270,9 @@
                         }
                         that.fullscreenLoading = false;
                     },
+                    error: function () {
+                        that.$message.error("上传文件异常,请稍后重试！");
+                    }
                 });
             },
             isMobile: function () {
@@ -318,7 +321,7 @@
                     dataType: "json",
                     url: that.getUrl(url),
                     data: input,
-                    //contentType: "application/x-www-form-urlencoded",
+                    contentType: false,
                     processData: false,
                     success: function (data) {
                         if (data.status) {

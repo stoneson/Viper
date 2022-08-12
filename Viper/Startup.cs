@@ -40,6 +40,12 @@ namespace Viper.GetWay
                 //options.Providers.Add<BrotliCompressionProvider>();
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "image/svg+xml" });
             });
+            services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+            {
+                options.ValueLengthLimit = int.MaxValue;
+                options.MultipartBodyLengthLimit = int.MaxValue;
+                options.MultipartHeadersLengthLimit = int.MaxValue;
+            });
             services.AddAnnoSwagger();
         }
 
@@ -73,13 +79,11 @@ namespace Viper.GetWay
                 endpoints.MapHub<Hubs.MonitorHub>("/MonitorHub");
                 endpoints.MapControllerRoute("default", "{Controller=Home}/{action=Index}/{id?}");
             });
-            //app.Use(next => new RequestDelegate(
-            //     async context =>
-            //     {
-            //         context.Request.EnableBuffering();
-            //         await next(context);
-            //     }
-            //   ));
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Request.EnableBuffering();
+            //    await next();
+            //});
             app.UseAnnoSwagger(env);
         }
     }
