@@ -5,11 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vive.Anno.Core" Version="1.7.1.731" />
+	  <PackageReference Include="Vive.Anno.ViperLog" Version="1.7.1.732" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Anno.ViperLog\Anno.ViperLog.csproj" />
     <ProjectReference Include="..\..\HelloWorldDto\HelloWorldDto.csproj" />
   </ItemGroup>
 

@@ -8,7 +8,7 @@
     <Compile Remove="RSAWinHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Core" Version="1.7.1.731" />
+	  <PackageReference Include="Vive.Anno.Core" Version="1.7.1.732" />
   </ItemGroup>
 
 </Project>
