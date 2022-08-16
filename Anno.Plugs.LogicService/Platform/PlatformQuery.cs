@@ -96,7 +96,7 @@ namespace Anno.QueryServices.Platform
             {
                 return new ActionResult(false, u, null, "用户已经被停用，请联系管理员！");
             }
-            u.profile = CryptoHelper.TripleDesEncrypting($"{u.ID},{u.account},{DateTime.Now}");
+            u.profile = CryptoHelper.EncodeToBase64($"{u.ID},{u.account},{DateTime.Now}");
             u.timespan = DateTime.Now;
             return new ActionResult(true, u);
         }
@@ -376,10 +376,10 @@ namespace Anno.QueryServices.Platform
                  * profiles[1] 用户Account
                  * profiles[2] token 产生日期
                  */
-                profiles = CryptoHelper.TripleDesDecrypting(token).Split(',');
+                profiles = CryptoHelper.DecodeFromBase64(token).Split(',');
             }
-            catch{
-                throw new Exception("Illegal token.");
+            catch(Exception ex){
+                throw new Exception("Illegal token." + ex.Message);
             }
             ProfileToken u = null;
             if (Const.RedisConfigure.Default().Switch)

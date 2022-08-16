@@ -114,6 +114,91 @@ namespace Anno.Common
 
         #endregion
 
+        #region Hex
+        /// <summary>
+        /// 将字节数组转换成16进制字符串
+        /// </summary>
+        /// <param name="bytes">字节数组</param>
+        /// <returns></returns>
+        public static string ToHexString(byte[] bytes)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                sb.Append(bytes[i].ToString("X2"));
+            }
+            return sb.ToString();
+        }
+        /// <summary>
+        /// 将16进制字符串转换成字节数组
+        /// </summary>
+        /// <param name="hex">16进制字符串</param>
+        /// <returns></returns>
+        public static byte[] HexToBytes( string hex)
+        {
+            if (hex.Length == 0)
+            {
+                return new byte[] { 0 };
+            }
+
+            if (hex.Length % 2 == 1)
+            {
+                hex = "0" + hex;
+            }
+            byte[] result = new byte[hex.Length / 2];
+            for (int i = 0; i < hex.Length / 2; i++)
+            {
+                result[i] = byte.Parse(hex.Substring(2 * i, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
+            }
+
+            return result;
+        }
+        #endregion
+        #region Base64
+
+        /// <summary>
+        /// 加密，返回Base64字符串
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        /// <param name="encoding">编码类型，默认为<see cref="Encoding.UTF8"/></param>
+        /// <returns></returns>
+        public static string EncodeToBase64(string value, Encoding encoding = null)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+
+            return Convert.ToBase64String(encoding.GetBytes(value));
+        }
+
+        /// <summary>
+        /// 解密
+        /// </summary>
+        /// <param name="value">待解密的值</param>
+        /// <param name="encoding">编码类型，默认为<see cref="Encoding.UTF8"/></param>
+        /// <returns></returns>
+        public static string DecodeFromBase64(string value, Encoding encoding = null)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+
+            return encoding.GetString(Convert.FromBase64String(value));
+        }
+        #endregion
+
         #region TripleDES加密
 
         /// <summary>
@@ -123,21 +208,24 @@ namespace Anno.Common
         {
             try
             {
-                byte[] bytIn = Encoding.Default.GetBytes(strSource);
+                byte[] bytIn = Encoding.UTF8.GetBytes(strSource);
                 byte[] key = {
                                  42, 16, 93, 156, 78, 4, 218, 32, 15, 167, 44, 80, 26, 20, 155, 112, 2, 94, 11, 204, 119
                                  ,
                                  35, 184, 197
                              }; //定义密钥
                 byte[] iv = { 55, 103, 246, 79, 36, 99, 167, 3 }; //定义偏移量
-                var tripleDes = new TripleDESCryptoServiceProvider { IV = iv, Key = key };
+                var tripleDes = new TripleDESCryptoServiceProvider { IV = iv, Key = key 
+                    //,Mode = CipherMode.ECB,
+                    //Padding = PaddingMode.PKCS7
+                };
                 ICryptoTransform encrypto = tripleDes.CreateEncryptor();
                 var ms = new MemoryStream();
                 var cs = new CryptoStream(ms, encrypto, CryptoStreamMode.Write);
                 cs.Write(bytIn, 0, bytIn.Length);
                 cs.FlushFinalBlock();
                 byte[] bytOut = ms.ToArray();
-                return Convert.ToBase64String(bytOut);
+                return Convert.ToBase64String(bytOut);//
             }
             catch (Exception ex)
             {
@@ -156,18 +244,21 @@ namespace Anno.Common
         {
             try
             {
-                byte[] bytIn = Convert.FromBase64String(source);
+                byte[] bytIn = Convert.FromBase64String(source);//
                 byte[] key = {
                                  42, 16, 93, 156, 78, 4, 218, 32, 15, 167, 44, 80, 26, 20, 155, 112, 2, 94, 11, 204, 119
                                  ,
                                  35, 184, 197
                              }; //定义密钥
                 byte[] iv = { 55, 103, 246, 79, 36, 99, 167, 3 }; //定义偏移量
-                var tripleDes = new TripleDESCryptoServiceProvider { IV = iv, Key = key };
+                var tripleDes = new TripleDESCryptoServiceProvider { IV = iv, Key = key
+                    //, Mode = CipherMode.ECB,
+                    //Padding = PaddingMode.PKCS7
+                };
                 ICryptoTransform encrypto = tripleDes.CreateDecryptor();
                 var ms = new MemoryStream(bytIn, 0, bytIn.Length);
                 var cs = new CryptoStream(ms, encrypto, CryptoStreamMode.Read);
-                var strd = new StreamReader(cs, Encoding.Default);
+                var strd = new StreamReader(cs, Encoding.UTF8);
                 return strd.ReadToEnd();
             }
             catch (Exception ex)
