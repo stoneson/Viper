@@ -1,6 +1,7 @@
 ﻿/// <reference path="../../js/jquery.js" />
 /// <reference path="../../js/base.js" />
 var vm = null, _isMobile = false;
+var _isLinked = false;
 $(function () {
     Init();
     try {
@@ -8,6 +9,7 @@ $(function () {
         args = anno.GetUrlParms();
         if (args.TraceId != undefined && args.TraceId != null) {
             vm.form.title = args.TraceId;
+            _isLinked = true;
         }
     } catch(ex) {console.log(ex); }
     LoadData(1, 20);
