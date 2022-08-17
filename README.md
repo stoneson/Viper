@@ -15,7 +15,7 @@
 ![Dashboard](https://z3.ax1x.com/2021/06/29/Ra0ocR.png)
 ![Dashboard](https://z3.ax1x.com/2021/06/29/RaBkE8.png)
 
-##  🎩[Java 实现 ](https://github.com/duyanming/anno.thrift-parent) : https://github.com/duyanming/anno.thrift-parent
+##  🎩[Java 实现 ](https://gitee.com/stoneson/wanno/tree/master/samples/Thrift/Anno.javaService) : https://gitee.com/stoneson/wanno/tree/master/samples/Thrift/Anno.javaService
 
 ##  🔥[在线演示地址](http://49.232.112.70) :http://49.232.112.70
     账号：anno
