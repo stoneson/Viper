@@ -49,7 +49,7 @@
                     <div v-on:click="changeisCollapse" style="width: 1px; float: left; cursor: pointer;">
                         <i :class="{'el-icon-s-fold':isCollapse==false,'el-icon-s-unfold':isCollapse}"></i>
                     </div>
-                    <a v-show="(_isMobile&&isCollapse)||(!_isMobile)" style="cursor: pointer; text-decoration: underline; float:left;margin-left:40px;color:#3e3434;" target="_blank" href="https://duyanming.github.io/">官方文档</a>
+                    @*<a v-show="(_isMobile&&isCollapse)||(!_isMobile)" style="cursor: pointer; text-decoration: underline; float:left;margin-left:40px;color:#3e3434;" target="_blank" href="https://duyanming.github.io/">官方文档</a>*@
                     <div uInfo style="height: 60px; float: right; margin-right:10px;">
                         <el-avatar size="medium" style="vertical-align: middle;">{{profile.account}}</el-avatar>
                         <el-dropdown trigger="click" @@command="handleCommand">

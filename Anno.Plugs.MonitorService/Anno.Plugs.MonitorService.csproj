@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net461</TargetFrameworks>
     <Version>$(Version)</Version>
-    <PackageProjectUrl>https://github.com/duyanming/Viper</PackageProjectUrl>
+    <PackageProjectUrl>https://gitee.com/stoneson/Viper</PackageProjectUrl>
     <Authors>Du Yanming</Authors>
     <Company>Du Yanming</Company>
     <PackageIcon>logo.jpg</PackageIcon>

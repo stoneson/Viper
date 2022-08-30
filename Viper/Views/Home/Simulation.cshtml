@@ -4,7 +4,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome Viper&Anno</h1>
-    <p>Learn about <a href="https://github.com/duyanming/Viper">Viper&Anno</a>.</p>
+    <p>Learn about <a href="https://gitee.com/stoneson/Viper">Viper&Anno</a>.</p>
     <p>Anno 是一个微服务快速开发框架，底层通讯可以随意切换 grpc、thrift。自带服务发现、调用链追踪、Cron 调度、限流、事件总线、CQRS 、DDD、类似MVC的开发体验，插件化开发。 Anno is a microservices rapid development framework, the underlying communication can be arbitrary switch GRPC, thrift.Built-in service discovery, call chain tracking, Cron scheduling, current limiting, event bus, CQRS, DDD, similar MVC development experience, plug-in development.</p>
 </div>
 <div style="width:100%;text-align:center;">
@@ -13,8 +13,10 @@
     <div id="btn" style="width:8%; height:250px; line-height:250px; float:left; vertical-align:middle;"> <input type="button" value="发送请求" send /></div>
     <div style="width:44%; height:250px;  float:left" id="output"></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/jsoneditor@9.1.1/dist/jsoneditor.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsoneditor@9.1.1/dist/jsoneditor.min.css" />
+@*<script src="https://cdn.jsdelivr.net/npm/jsoneditor@9.1.1/dist/jsoneditor.min.js"></script>*@
+@*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsoneditor@9.1.1/dist/jsoneditor.min.css" />*@
+<link rel="stylesheet" href="~/css/jsoneditor.min.css" />
+<script src="~/js/jsoneditor.min.js"></script>
 @*<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>*@
 <script src="~/js/jquery.min.js"></script>
 <script src="~/js/base.js"></script>
@@ -30,10 +32,11 @@
         };
         const inputEditor = new JSONEditor(document.getElementById("input"), options)
         const inputJson = {
-            "channel": "anno.component",
-            "router": "UserInfo",
-            "method": "HelloWorld",
-            "name": ".net love java"
+            "channel": "Anno.Plugs.SoEasyService",
+            "router": "AnnoSoEasyModule",
+            "method": "SayHi",
+            "vname": ".net love java",
+            "vage": "30"
         };
         inputEditor.set(inputJson)
 
