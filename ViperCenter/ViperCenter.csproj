@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>$(DeveloperBuildCoreTfms)</TargetFramework>
+    <TargetFrameworks>$(DeveloperBuildCoreTfms)</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Vive.Anno.Rpc.Center" Version="1.7.1.732" />
+	  <PackageReference Include="Vive.Anno.Rpc.Center" Version="1.7.1.741" />
       <PackageReference Include="Flurl.Http" Version="3.2.4" />
   </ItemGroup>
 

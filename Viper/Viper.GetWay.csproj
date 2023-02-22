@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>$(DeveloperBuildCoreTfms)</TargetFramework>
+    <TargetFrameworks>$(DeveloperBuildCoreTfms)</TargetFrameworks>
     <UserSecretsId>c06d59db-8a8f-4ceb-8d0c-9ed26ed26d10</UserSecretsId>
   </PropertyGroup>
 
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vive.Anno.Api.GateWay" Version="1.7.1.732" />
+    <PackageReference Include="Vive.Anno.Api.GateWay" Version="1.7.1.741" />
   </ItemGroup>
 
   <ItemGroup>

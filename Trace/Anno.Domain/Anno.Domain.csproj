@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-   <PackageReference Include="Vive.Anno.EventBus" Version="1.7.1.732" />
+   <PackageReference Include="Vive.Anno.EventBus" Version="1.7.1.741" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
 
